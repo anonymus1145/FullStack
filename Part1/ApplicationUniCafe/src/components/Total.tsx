@@ -1,3 +1,5 @@
+
+/*
 import { Part } from "../App";
 
 export const Total = ({parts} : {parts: Part[]})  => {
@@ -9,3 +11,4 @@ export const Total = ({parts} : {parts: Part[]})  => {
     </div>
   );
 };
+*/
