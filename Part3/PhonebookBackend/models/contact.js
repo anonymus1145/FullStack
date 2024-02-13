@@ -11,6 +11,7 @@ if (process.env.DB_PASSWORD.length<3) {
 mongoose.set("strictQuery",false);
 
 mongoose.connect(process.env.CONNECTION_STRING)
+  // eslint-disable-next-line no-unused-vars
   .then(result => {
     console.log("connected to MongoDB");
   })
@@ -19,9 +20,17 @@ mongoose.connect(process.env.CONNECTION_STRING)
   });
 
 const contactPersonSchema = new mongoose.Schema({
-  id: Number,
-  name: String,
-  number: String,
+  // Add validation rules in the schema
+  name: {
+    type: String,
+    minLength: 3,
+    required: true,
+  },
+  number: {
+    type: String,
+    minLength: 8,
+    required: true,
+  },
 });
 
 // Change the schema to JSON
