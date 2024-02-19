@@ -1,0 +1,48 @@
+###
+#POST http://localhost:3001/people
+#Content-Type: application/json
+
+#{
+#  "name": "Test1 test1",
+#  "number": "2040-1234567"
+#}
+###
+
+#GET http://localhost:3001/api/blogs
+
+#DELETE http://localhost:3001/api/blogs/65d3a517e74d91551dec4d8b
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1pa2E1NCIsImlkIjoiNjVkMmY3ODgyODhmZjA0NTFkMDc0NGQzIiwiaWF0IjoxNzA4MzY5MDQwLCJleHAiOjE3MDgzNzA4NDB9.pZnORR03rXwUhCTBCKuO_dIxD933m5-PBmWJZP8MCaQ
+
+
+
+PUT http://localhost:3001/api/blogs/65d3a501e74d91551dec4d87
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1pa2E1NCIsImlkIjoiNjVkMmY3ODgyODhmZjA0NTFkMDc0NGQzIiwiaWF0IjoxNzA4MzcwNTMxLCJleHAiOjE3MDgzNzIzMzF9.TYxqZETjUqx0l8qExT5YW660rynKzf0ndCw048NTiVI
+
+{
+  "title": "Blog1",
+  "author": "Mika54",
+  "url": "https://test.com",
+  "likes": 1
+}
+
+
+#POST http://localhost:3001/api/users
+#Content-Type: application/json
+
+#{
+#  "email": "5D9yF@example.com",
+#  "username": "Test2",
+#  "name": "test2",
+#  "password": "test2test2"
+#}
+
+
+#POST http://localhost:3001/api/login
+#Content-Type: application/json
+
+#{
+#  "username": "Mika54",
+#  "password": "test2test2"
+#}
+
