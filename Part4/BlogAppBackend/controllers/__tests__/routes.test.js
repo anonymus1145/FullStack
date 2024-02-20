@@ -19,6 +19,7 @@ const initialBlogs = [{
 	likes: 3
 }];
 
+
 // Before each test we clear the database
 beforeEach(async () => {
 	await Blog.deleteMany({});
@@ -58,7 +59,34 @@ describe("Check blog posts properties", () => {
 	});
 });
 
-/* describe("POST /api/blogs", () => {
+// Variable to store the token
+let token = "";
+
+describe("POST /api/blogs", () => {
+
+	test("Requaires a valid token", async () => {
+		await api
+			.post("/api/blogs")
+			.send({})
+			.expect(401)
+			.expect("Content-Type", /application\/json/);
+	});
+
+	test("Register a new user", async () => {
+		await api
+			.post("/api/login")
+			.send({
+				username: "rooott",
+				password: "sekret!!",
+			})
+			.expect(200)
+			.expect("Content-Type", /application\/json/)
+			.expect(response => {
+				expect(response.body.token).toBeDefined();
+				token = response.body.token;
+			});
+	});
+
 	// Test that makes an HTTP POST request to the /api/blogs URL and adds a new blog
 	test("Increases the number of blog posts by 1", async () => {
 		const newBlog = {
@@ -68,20 +96,18 @@ describe("Check blog posts properties", () => {
 			likes: 5,
 		};
 
-		const token = await api.post("/api/login").send({ username: "rooott", password: "sekret!!" }).then(res => res.body.token);
-
 		await api
 			.post("/api/blogs")
-			.set("Authorization", `Bearer ${token}`)
 			.send(newBlog)
-			.expect(201)
+			.set("Authorization", `Bearer ${token}`)			
+			.expect(200)
 			.expect("Content-Type", /application\/json/);
 
 		expect((await api.get("/api/blogs")).body).toHaveLength(initialBlogs.length + 1);
 	});
-}); */
+});
 
-/* describe("Check missing properties", () => {
+describe("Check missing properties", () => {
 // Test to see if the title and url properties are missing
 	test("Title and url properties are missing", async () => {
 		const newBlog = {
@@ -90,39 +116,42 @@ describe("Check blog posts properties", () => {
 		await api
 			.post("/api/blogs")
 			.send(newBlog)
+			.set("Authorization", `Bearer ${token}`)
 			.expect(400);
 	});
-}); */
+});
 
-/* describe("DELETE /api/blogs/:id", () => {
+describe("DELETE /api/blogs/:id", () => {
 // Test that makes an HTTP DELETE request to the /api/blogs URL and deletes a blog
 	test("Delete a blog", async () => {
 		const response = await api.get("/api/blogs");
 		const id = response.body[0].id;
 		await api
 			.delete(`/api/blogs/${id}`)
+			.set("Authorization", `Bearer ${token}`)
 			.expect(204);
 	});
-}); */
+});
 
-/* describe("PUT /api/blogs/:id, update a blog", () => {
+describe("PUT /api/blogs/:id, update a blog", () => {
 // Test that makes an HTTP PUT request to the /api/blogs URL and updates a blog
 	test("Update a blog", async () => {
 		const response = await api.get("/api/blogs");
 		const id = response.body[0].id;
 		const updatedBlog = {
 			title: "Test1 test1",
-			author: "test1",
+			author: "rooott",
 			url: "test1",
 			likes: 6,
 		};
 		await api
 			.put(`/api/blogs/${id}`)
 			.send(updatedBlog)
+			.set("Authorization", `Bearer ${token}`)
 			.expect(200)
 			.expect("Content-Type", /application\/json/);
 	});
-}); */
+});
 
 // Closes the connection
 afterAll(async () => {

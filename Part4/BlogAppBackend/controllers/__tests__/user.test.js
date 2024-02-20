@@ -58,10 +58,6 @@ describe("POST /api/users", () => {
 		assert(usernames.includes(newUser.username));
 	});
 });
-// Closes the connection
-afterAll(async () => {
-	await mongoose.connection.close();
-});
 
 
 describe("GET /api/users", () => {
@@ -78,6 +74,11 @@ describe("GET /api/users", () => {
 			.expect(400)
 			.expect("Content-Type", /application\/json/);
 	});
+});
+
+
+afterAll(() => {
+	mongoose.connection.close();
 });
 
 
