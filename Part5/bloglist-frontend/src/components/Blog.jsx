@@ -69,9 +69,9 @@ const Blog = ({ blog, setUser, setErrorMessage, blogs, setBlogs }) => {
       }, 5000);
     }
   };
-
+// We give to the component a ClassName so that we can access it in the tests
   return (
-    <>
+    <div className="blog">
       <div style={{ marginTop: "10px" }}>
         {blog.title}
         <button style={{ marginLeft: "10px" }} onClick={() => setView("true")}>
@@ -94,7 +94,7 @@ const Blog = ({ blog, setUser, setErrorMessage, blogs, setBlogs }) => {
           </div>
         ) : null}
       </div>
-    </>
+    </div>
   );
 };
 
