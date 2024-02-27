@@ -41,6 +41,8 @@ describe("Blog app", () => {
     it("a blog can be viewed", function() {
       cy.contains("View").click();
       cy.contains("added by Mika54");
+      cy.contains("like").click();
+      cy.contains("delete").click();
     });
   });
 

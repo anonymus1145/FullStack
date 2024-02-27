@@ -22,12 +22,12 @@ loginRouter.post("/", async (request, response) => {
 		id: user._id,
 	};
  
-	// Create token for user with username and id which expires in 30 minutes
-	const token = jwt.sign(userForToken, process.env.SECRET, {expiresIn: 30*60});
+	// Create token for user with username and id which expires in 10 minutes
+	const token = jwt.sign(userForToken, process.env.SECRET, {expiresIn: 600});
 
 	response
 		.status(200)
-		.send({ token, username: user.username, name: user.name });
+		.send({ token, username: user.username, name: user.name});
 });
 
 module.exports = loginRouter;

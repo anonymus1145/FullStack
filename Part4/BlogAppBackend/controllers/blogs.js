@@ -3,13 +3,32 @@ const blogsRouter = require("express").Router();
 const jwt = require("jsonwebtoken");
 
 // Middleware to getToken
-const getTokenFrom = request => {
+const getTokenFrom = (request, response) => {
 	const authorization = request.get("authorization");
 
 	if (authorization && authorization.startsWith("Bearer ")) {
 		return authorization.replace("Bearer ", "");
 	}
-	return null;
+	return response.status(401).json({ error: "Session expired"});
+};
+
+// Function to check if token is valid
+const checkToken = (token) => {
+	try {
+		const decodedToken = jwt.verify(token, process.env.SECRET);
+		const expirationTime = Math.floor(Date.now() / 1000);
+
+		// Log the time and expiration time
+		console.log("Time till expiration: " + (decodedToken.exp - expirationTime) + "seconds");
+
+
+		if (expirationTime >= decodedToken.exp + (10 * 60)) {
+			return false;
+		}
+		return decodedToken;
+	} catch (exception) {
+		return false;
+	}
 };
 
 // Import model/schema
@@ -46,8 +65,9 @@ blogsRouter.post("/", async (request, response, next) => {
 	if (!token) {
 		return response.status(401).json({ error: "token missing or invalid" });
 	}
-	const decodedToken = jwt.verify(token, process.env.SECRET);
-	if (!decodedToken.id) {
+	// Check if the token is expired
+	const decodedToken = checkToken(token);
+	if (!decodedToken.id || !decodedToken) {
 		return response.status(401).json({ error: "token invalid" });
 	}
 	const user = await User.findOne({username: decodedToken.username});
@@ -59,7 +79,7 @@ blogsRouter.post("/", async (request, response, next) => {
 		likes: body.likes || 0,
 	});
 
-	if (!blog.title || !blog.url || !blog.author || !blog.likes) {
+	if (!blog.title || !blog.url || !blog.author) {
 		return response.status(400).json({
 			error: "title and url are required"
 		});
@@ -85,7 +105,9 @@ blogsRouter.delete("/:id", async (request, response, next) => {
 	if (!token) {
 		return response.status(401).json({ error: "token missing or invalid" });
 	}
-	const decodedToken = jwt.verify(token, process.env.SECRET);
+
+	// Check if the token is expired
+	const decodedToken = checkToken(token);
 	if (!decodedToken.id || !decodedToken.username) {
 		return response.status(401).json({ error: "token invalid" });
 	}
@@ -118,8 +140,11 @@ blogsRouter.put("/:id", async (request, response, next) => {
 	if (!token) {
 		return response.status(401).json({ error: "token missing or invalid" });
 	}
-	const decodedToken = jwt.verify(token, process.env.SECRET);
-	if (!decodedToken.id || !decodedToken.username) {
+
+	// Check if the token is expired
+	const decodedToken = checkToken(token);
+
+	if (!decodedToken.id || !decodedToken) {
 		return response.status(401).json({ error: "token invalid" });
 	}
 

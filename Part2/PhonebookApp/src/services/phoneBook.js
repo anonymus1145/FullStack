@@ -1,6 +1,8 @@
+/**
+ * @module phoneBook
+ */
 import axios from "axios";
-
-const baseUrl = "http://localhost:3001/persons";
+const baseUrl = "/api/users";
 
 export const getAll = () => {
   return axios.get(baseUrl).then((response) => response.data);
@@ -21,6 +23,8 @@ export const deletePerson = (id) => {
 };
 
 export const update = (id, newPerson) => {
-  const request = axios.patch(`${baseUrl}/${id}`, newPerson)
-  return request.then(response => response.data)
+  return axios
+    .put(`${baseUrl}/${id}`, newPerson)
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
 }

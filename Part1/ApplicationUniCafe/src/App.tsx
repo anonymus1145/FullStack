@@ -1,8 +1,11 @@
+// @ts-check
+
 import { Header } from "./components/Header";
 import { Statistics } from "./components/Content";
 //import { Total } from "./components/Total";
 import { Button } from "./components/Button";
 import { useState } from "react";
+
 
 // First Part
 /*
