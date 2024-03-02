@@ -1,11 +1,22 @@
+//@ts-check
+import React from "react";
 import Blog from "./Blog";
 import CreateNote from "./CreateNote";
 import { useState } from "react";
 import blogService from "../services/blogs";
+import { useSelector, useDispatch } from "react-redux";
+import { addBlogToState } from "../Reducers/blogsReducer";
 
-const BlogForm = ({ user, blogs,setBlogs, setUser, setErrorMessage, newTitle, setNewTitle, newUrl, setNewUrl }) => {
+const BlogForm = ({ user,  setUser, setErrorMessage, newTitle, setNewTitle, newUrl, setNewUrl }) => {
   // State for new blog to be able to hide the form
   const [newBlog, setNewBlog] = useState("");
+
+  // Get blogs from Redux store
+  // @ts-ignore
+  const blogs = useSelector((state) => state.blogs);
+
+  // We call useDispatch hook to get access to the actions from the store
+  const dispatch = useDispatch();
 
   // Remove local storage and set user state to null
   const handleLogout = () => {
@@ -14,7 +25,7 @@ const BlogForm = ({ user, blogs,setBlogs, setUser, setErrorMessage, newTitle, se
   };
 
   // Create new blog and add it to the list of blogs in the database
-  const addBlog = async (event) => {
+  const addBlog = async (/** @type {{ preventDefault: () => void; }} */ event) => {
     event.preventDefault();
     // Create blog object
     try {
@@ -30,8 +41,14 @@ const BlogForm = ({ user, blogs,setBlogs, setUser, setErrorMessage, newTitle, se
       setTimeout(() => {
         setErrorMessage(null);
       }, 5000);
-      blogs = await blogService.getAll();
-      setBlogs(blogs);
+
+      // Add blog to state, so we can see it in the list without refreshing the page and without makeing
+      // a new request to the server
+      dispatch(addBlogToState({
+        title: newTitle,
+        author: user.username,
+        url: newUrl,
+      }));
     } catch (exception) {
       if (exception.response.status === 401) {
         window.localStorage.removeItem("loggedUser");
@@ -44,16 +61,23 @@ const BlogForm = ({ user, blogs,setBlogs, setUser, setErrorMessage, newTitle, se
     }
   };
 
+  const setKey = ( /** @type {React.Key | null | undefined} */ keyId) => {
+   if (keyId) {
+     return keyId;
+   } 
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  };
+
   return (
    <div> 
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} setUser={setUser} setErrorMessage={setErrorMessage} blogs={blogs} setBlogs={setBlogs}/>
+      {blogs.map((/** @type {{ id: React.Key | null | undefined; }} */ blog) => (
+        <Blog key={setKey(blog.id)} blog={blog} setUser={setUser} setErrorMessage={setErrorMessage} />
       ))}
       {newBlog ?
         <form onSubmit={addBlog}>
         <CreateNote
+          // @ts-ignore
           user={user}
-          setBlogs={setBlogs}
           setErrorMessage={setErrorMessage}
           newTitle={newTitle}
           setNewTitle={setNewTitle}

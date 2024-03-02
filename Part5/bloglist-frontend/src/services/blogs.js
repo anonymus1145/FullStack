@@ -1,3 +1,4 @@
+//@ts-check
 import axios from "axios";
 const baseUrl = "/api/blogs";
 
@@ -5,7 +6,7 @@ const baseUrl = "/api/blogs";
 let token = null;
 
 // Function to get the token from login user
-const setToken = (newToken) => {
+const setToken = (/** @type {{ token: string; }} */ newToken) => {
   token = `Bearer ${newToken}`;
 };
 
@@ -16,7 +17,7 @@ const getAll = async () => {
 };
 
 // Function to create a new blog
-const create = async (newObject) => {
+const create = async (/** @type {object} */ newObject) => {
   const config = {
     headers: { Authorization: token },
   };
@@ -25,7 +26,7 @@ const create = async (newObject) => {
 };
 
 // Function to update a blog
-const update = async (id, newObject) => {
+const update = async (/** @type {{ id: string }} */ id, /** @type {object} */ newObject) => {
   const config = {
     headers: { Authorization: token },
   };
@@ -34,7 +35,7 @@ const update = async (id, newObject) => {
 };
 
 // Function to delete a blog
-const remove = async (id) => {
+const remove = async (/** @type {{ id: string }} */ id) => {
   const config = {
     headers: { Authorization: token },
   };

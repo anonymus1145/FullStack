@@ -1,9 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import getData from "../../server";
 
-
+// Anecdotes reducer initial state
 const initialState = [];
 
+// We create a slice of the redux store with the name 'anecdotes' using createSlice
+// We pass the initial state and the reducer function as arguments to the createSlice
+// The reducer function is used to update the state
+// The reducer function is called whenever an action is dispatched
 const anecdoteSlice = createSlice({
   name: "anecdotes",
   initialState,
@@ -42,6 +46,7 @@ export const {
 // Actions creators
 //
 // Initialize Anecdotes based on server data
+// We create this action creator in the reducer to get the data from the server 
 export const initializeAnecdotes = () => {
   return async (dispatch) => {
     const anecdotes = await getData.getAll();

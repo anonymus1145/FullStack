@@ -1,17 +1,25 @@
+//@ts-check
+import React from "react";
 import { useState } from "react";
 import blogService from "../services/blogs";
+import { useDispatch } from "react-redux";
+import { initializeBlogs, removeBlog } from "../Reducers/blogsReducer";
 
-const Blog = ({ blog, setUser, setErrorMessage, blogs, setBlogs }) => {
+const Blog = ({ blog, setUser, setErrorMessage}) => {
   // State for View
   const [view, setView] = useState("");
   // State for number of likes
   const [likes, setLikes] = useState(blog.likes);
 
+
+  // We call useDispatch hook to get access to the actions from the store
+  const dispatch = useDispatch();
+
   // Function to update the state of blogs
-  const click = async () => {
-    blogs = await blogService.getAll();
-    blogs.sort((a, b) => b.likes - a.likes);
-    setBlogs(blogs);
+  const click = () => {
+    // We call dispatch and give the action creator as an argument to update the state
+    // We call the initializeAnecdotes action from the reducer and pass it to the action 
+    dispatch(initializeBlogs());
   };
 
   // Function to like a blog
@@ -53,9 +61,8 @@ const Blog = ({ blog, setUser, setErrorMessage, blogs, setBlogs }) => {
       if (!window.confirm) {
         return;
       }
-      await blogService.remove(blog.id);
-      // Update blogs state
-      click();
+      // Delete blog and update's the state
+     dispatch(removeBlog(blog.id)); 
     } catch (exception) {
       if (exception.response.status === 401) {
         console.log(exception);

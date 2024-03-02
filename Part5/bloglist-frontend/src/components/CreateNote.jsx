@@ -1,3 +1,6 @@
+//@ts-check
+import React from "react";
+
 const CreateNote = ({  newTitle, setNewTitle, newUrl, setNewUrl }) => {
     return (
       <>

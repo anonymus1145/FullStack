@@ -1,3 +1,5 @@
+//@ts-check
+import React from "react";
 import blogService from "../services/blogs";
 import loginService from "../services/login";
 
@@ -12,7 +14,7 @@ const LoginForm = ({
 
  // Login logic
   // Makes a POST request to the server using login module and returns the user object
-  const handleLogin = async (event) => {
+  const handleLogin = async (/** @type {{ preventDefault: () => void; }} */ event) => {
     event.preventDefault();
     try {
       const user = await loginService.login({
