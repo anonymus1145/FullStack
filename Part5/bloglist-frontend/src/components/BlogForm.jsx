@@ -6,14 +6,22 @@ import { useState } from "react";
 import blogService from "../services/blogs";
 import { useSelector, useDispatch } from "react-redux";
 import { addBlogToState } from "../Reducers/blogsReducer";
+import { initializeUser } from "../Reducers/userReducer";
+import { initializeNotification } from "../Reducers/notificationReducer";
 
-const BlogForm = ({ user,  setUser, setErrorMessage, newTitle, setNewTitle, newUrl, setNewUrl }) => {
+const BlogForm = () => {
   // State for new blog to be able to hide the form
   const [newBlog, setNewBlog] = useState("");
-
+  // State for new blog
+  const [newTitle, setNewTitle] = useState("");
+  const [newUrl, setNewUrl] = useState("");
   // Get blogs from Redux store
   // @ts-ignore
   const blogs = useSelector((state) => state.blogs);
+
+  // Get user from Redux store
+  // @ts-ignore
+  const user = useSelector((state) => state.user);
 
   // We call useDispatch hook to get access to the actions from the store
   const dispatch = useDispatch();
@@ -21,7 +29,7 @@ const BlogForm = ({ user,  setUser, setErrorMessage, newTitle, setNewTitle, newU
   // Remove local storage and set user state to null
   const handleLogout = () => {
     window.localStorage.removeItem("loggedUser");
-    setUser(null);
+    dispatch(initializeUser(null));
   };
 
   // Create new blog and add it to the list of blogs in the database
@@ -36,10 +44,11 @@ const BlogForm = ({ user,  setUser, setErrorMessage, newTitle, setNewTitle, newU
       });
       setNewTitle("");
       setNewUrl("");
-      setErrorMessage("New blog added");
+     // Change state of notification to show that blog was added
+      dispatch(initializeNotification("Blog added"));
       setNewBlog("");
       setTimeout(() => {
-        setErrorMessage(null);
+        dispatch(initializeNotification("")); 
       }, 5000);
 
       // Add blog to state, so we can see it in the list without refreshing the page and without makeing
@@ -51,16 +60,17 @@ const BlogForm = ({ user,  setUser, setErrorMessage, newTitle, setNewTitle, newU
       }));
     } catch (exception) {
       if (exception.response.status === 401) {
-        window.localStorage.removeItem("loggedUser");
-        setUser(null);
+       handleLogout(); 
       }
-      setErrorMessage("Cannot add blog");
+      // Set error message
+      dispatch(initializeNotification("Cannot add blog"));
       setTimeout(() => {
-        setErrorMessage(null);
+        dispatch(initializeNotification(""));
       }, 5000);
     }
   };
 
+  // Set key for blog if it dosen't exist
   const setKey = ( /** @type {React.Key | null | undefined} */ keyId) => {
    if (keyId) {
      return keyId;
@@ -71,14 +81,11 @@ const BlogForm = ({ user,  setUser, setErrorMessage, newTitle, setNewTitle, newU
   return (
    <div> 
       {blogs.map((/** @type {{ id: React.Key | null | undefined; }} */ blog) => (
-        <Blog key={setKey(blog.id)} blog={blog} setUser={setUser} setErrorMessage={setErrorMessage} />
+        <Blog key={setKey(blog.id)} blog={blog}  />
       ))}
       {newBlog ?
         <form onSubmit={addBlog}>
         <CreateNote
-          // @ts-ignore
-          user={user}
-          setErrorMessage={setErrorMessage}
           newTitle={newTitle}
           setNewTitle={setNewTitle}
           newUrl={newUrl}

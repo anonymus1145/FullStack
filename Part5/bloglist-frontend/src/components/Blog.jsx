@@ -4,8 +4,10 @@ import { useState } from "react";
 import blogService from "../services/blogs";
 import { useDispatch } from "react-redux";
 import { initializeBlogs, removeBlog } from "../Reducers/blogsReducer";
+import { initializeUser } from "../Reducers/userReducer";
+import { initializeNotification } from "../Reducers/notificationReducer";
 
-const Blog = ({ blog, setUser, setErrorMessage}) => {
+const Blog = ({ blog}) => {
   // State for View
   const [view, setView] = useState("");
   // State for number of likes
@@ -40,12 +42,12 @@ const Blog = ({ blog, setUser, setErrorMessage}) => {
       if (exception.response.status === 401) {
         console.log(exception);
         window.localStorage.removeItem("loggedUser");
-        setUser(null);
+       dispatch(initializeUser(null)); 
       }
       // Set error message
-      setErrorMessage("Cannot like blog");
+     dispatch(initializeNotification("Cannot like the blog")); 
       setTimeout(() => {
-        setErrorMessage(null);
+       dispatch(initializeNotification("")); 
       }, 5000);
     }
   };
@@ -67,12 +69,12 @@ const Blog = ({ blog, setUser, setErrorMessage}) => {
       if (exception.response.status === 401) {
         console.log(exception);
         window.localStorage.removeItem("loggedUser");
-        setUser(null);
+       dispatch(initializeUser(null)); 
       }
       // Set error message
-      setErrorMessage("Cannot delete blog");
+     dispatch(initializeNotification("Cannot delete the blog")); 
       setTimeout(() => {
-        setErrorMessage(null);
+       dispatch(initializeNotification(""));
       }, 5000);
     }
   };

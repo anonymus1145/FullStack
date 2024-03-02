@@ -26,6 +26,9 @@ const blogSlice = createSlice({
     addBlog(state, action) {
       state.push(action.payload);
     },
+    removeBlog(state, action) {
+      return state.filter((blog) => blog.id !== action.payload);
+    },
   },
 });
 
@@ -52,6 +55,28 @@ export const /** @type import("@reduxjs/toolkit").ActionCreator<any> */ addBlogT
         /** @type {(arg0: { payload: any; type: "blogs/addBlog"; }) => void} */ dispatch,
       ) => {
         dispatch(addBlog(blog));
+      };
+    };
+
+// Update blog in the state after it is updated in the server
+export const /** @type import("@reduxjs/toolkit").ActionCreator<any> */ updateBlog =
+    (blog) => {
+      return async (
+        /** @type {(arg0: { payload: any; type: "blogs/addBlog"; }) => void} */ dispatch,
+      ) => {
+      const updatedBlog = await blogService.update(blog.id, blog);
+        dispatch(addBlog(updatedBlog));
+      };
+    };
+
+// Remove blog from the state after it is removed from the server
+export const /** @type import("@reduxjs/toolkit").ActionCreator<any> */ removeBlog =
+    (id) => {
+      return async (
+        /** @type {(arg0: { payload: any; type: "blogs/addBlog"; }) => void} */ dispatch,
+      ) => {
+        await blogService.remove(id);
+        dispatch(removeBlog(id));
       };
     };
 
