@@ -3,7 +3,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // We give the reducer an initial state
-const initialState = null;
+const initialState = "";
 
 // We create a slice of the redux store with the name 'notification' using createSlice
 // We pass the initial state and the reducer function as arguments to the createSlice

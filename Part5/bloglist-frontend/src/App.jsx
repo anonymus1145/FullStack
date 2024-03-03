@@ -1,23 +1,14 @@
 //@ts-check
 import React from "react";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
 import BlogForm from "./components/BlogForm";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs } from "./Reducers/blogsReducer";
 import { initializeUser } from "./Reducers/userReducer";
-import { initializeNotification } from "./Reducers/notificationReducer";
 
 const App = () => {
-  // Username and password state for the login form
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  // State for new blog
-  const [newTitle, setNewTitle] = useState("");
-  const [newUrl, setNewUrl] = useState("");
-
   // We call the useDispatch hook to get access to the actions from the store
   const dispatch = useDispatch();
 
@@ -50,20 +41,7 @@ const App = () => {
       <h1>Blog App</h1>
       <h2>{message}</h2>
       {user ? (
-        <BlogForm
-          setNewTitle={setNewTitle}
-          setNewUrl={setNewUrl}
-          newTitle={newTitle}
-          newUrl={newUrl}
-        />
-      ) : (
-        <LoginForm
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-        />
-      )}
+        <BlogForm /> ) : ( <LoginForm /> )}
     </div>
   );
 };
