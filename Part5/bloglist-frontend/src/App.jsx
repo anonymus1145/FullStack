@@ -1,12 +1,24 @@
 //@ts-check
+// React import's
 import React from "react";
 import { useEffect } from "react";
+
+// Components import's
 import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
 import BlogForm from "./components/BlogForm";
+import Users from "./components/Users";
+import User from "./components/User";
+import BlogView from "./components/BlogView";
+
+
+// Redux import's
 import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs } from "./Reducers/blogsReducer";
 import { initializeUser } from "./Reducers/userReducer";
+
+//  React Routing import's
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const App = () => {
   // We call the useDispatch hook to get access to the actions from the store
@@ -36,13 +48,38 @@ const App = () => {
     }
   }, []);
 
+  // We create the router's
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <BlogForm />,
+      errorElement: <div> 404 Not found</div>,
+    },
+    {
+      path: "/users",
+      element: <Users />,
+      errorElement: <div> 404 Not found</div>,
+    },
+    {
+      path: "/users/:username",
+      element: <User />,
+      errorElement: <div> 404 Not found</div>,
+    },
+    {
+      path: "/:blogId",
+      element: <BlogView />,
+      errorElement: <div> 404 Not found</div>,
+    },
+  ]);
+
+  // Check if user is logged in and render the router
   return (
-    <div>
-      <h1>Blog App</h1>
-      <h2>{message}</h2>
-      {user ? (
-        <BlogForm /> ) : ( <LoginForm /> )}
-    </div>
+    <>
+      <div>{user ? <RouterProvider router={router} /> : <LoginForm />}</div>
+      <div>
+        <h3>{message}</h3>
+      </div>
+    </>
   );
 };
 

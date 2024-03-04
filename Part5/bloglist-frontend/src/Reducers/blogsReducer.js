@@ -29,10 +29,17 @@ const blogSlice = createSlice({
     removeBlog(state, action) {
       return state.filter((blog) => blog.id !== action.payload);
     },
+    likeBlog(state, action) {
+      const id = action.payload;
+      const blog = state.find((blog) => blog.id === id);
+      const changedBlog = { ...blog, likes: blog.likes + 1 };
+      // Replaces the blog in the state array with the given id with the changedBlog object and keeps the rest of the blogs unchanged.
+      return state.map((blog) => (blog.id !== id ? blog : changedBlog));
+    },
   },
 });
 
-export const { setBlogs, addBlog } = blogSlice.actions;
+export const { setBlogs, addBlog, removeBlog, likeBlog } = blogSlice.actions;
 
 // Action creators
 
@@ -47,7 +54,7 @@ export const /** @type import("@reduxjs/toolkit").ActionCreator<any> */ initiali
       };
     };
 
-// Add blog to the state after it is added to the server so that it can be displayed without having 
+// Add blog to the state after it is added to the server so that it can be displayed without having
 // to make a new request to the server
 export const /** @type import("@reduxjs/toolkit").ActionCreator<any> */ addBlogToState =
     (blog) => {
@@ -64,19 +71,29 @@ export const /** @type import("@reduxjs/toolkit").ActionCreator<any> */ updateBl
       return async (
         /** @type {(arg0: { payload: any; type: "blogs/addBlog"; }) => void} */ dispatch,
       ) => {
-      const updatedBlog = await blogService.update(blog.id, blog);
+        const updatedBlog = await blogService.update(blog.id, blog);
         dispatch(addBlog(updatedBlog));
       };
     };
 
 // Remove blog from the state after it is removed from the server
-export const /** @type import("@reduxjs/toolkit").ActionCreator<any> */ removeBlog =
+export const /** @type import("@reduxjs/toolkit").ActionCreator<any> */ deleteBlog =
     (id) => {
       return async (
         /** @type {(arg0: { payload: any; type: "blogs/addBlog"; }) => void} */ dispatch,
       ) => {
         await blogService.remove(id);
-        dispatch(removeBlog(id));
+        dispatch(deleteBlog(id));
+      };
+    };
+
+// Update the likes of the blog
+export const /** @type import("@reduxjs/toolkit").ActionCreator<any> */ blogLike =
+    (id) => {
+      return async (
+        /** @type {(arg0: { payload: any; type: string; }) => void} */ dispatch,
+      ) => {
+        dispatch(likeBlog(id));
       };
     };
 

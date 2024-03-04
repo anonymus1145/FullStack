@@ -1,13 +1,22 @@
 //@ts-check
+// React import's
 import React from "react";
+import { useState } from "react";
+
+// React component import's
 import Blog from "./Blog";
 import CreateNote from "./CreateNote";
-import { useState } from "react";
+import NavBar from "./NavBar";
+
+// Services import's
 import blogService from "../services/blogs";
+
+// Redux import's
 import { useSelector, useDispatch } from "react-redux";
 import { addBlogToState } from "../Reducers/blogsReducer";
 import { initializeUser } from "../Reducers/userReducer";
 import { initializeNotification } from "../Reducers/notificationReducer";
+
 
 const BlogForm = () => {
   // State for new blog to be able to hide the form
@@ -79,7 +88,8 @@ const BlogForm = () => {
   };
 
   return (
-   <div> 
+   <div>
+      <NavBar />
       {blogs.map((/** @type {{ id: React.Key | null | undefined; }} */ blog) => (
         <Blog key={setKey(blog.id)} blog={blog}  />
       ))}
@@ -93,12 +103,8 @@ const BlogForm = () => {
         />
         <button type="submit">create</button>
         <button onClick={() => setNewBlog("")}>Cancel</button>
-        </form> : <button style={{ marginTop: "10px" }} onClick={() => setNewBlog("true")}>Create new blog</button>
+        </form> : <button style={{ marginTop: "10px", marginBottom: "10px" }} onClick={() => setNewBlog("true")}>Create new blog</button>
       }
-      <div>
-        <h2>{user ? user.username : null} logged in</h2>
-        <button onClick={handleLogout}>logout</button>
-      </div>
     </div>
   )
 };
