@@ -1,0 +1,16 @@
+
+POST http://localhost:4000/
+content-type: application/json 
+
+{
+    "query": "{ allAuthors { name } }",
+}
+
+
+#curl 'http://localhost:4000/' \
+#  -X POST \
+#  -H 'Authorization: Token xxxxx' \
+#  -H 'content-type: application/json' \
+#  --data '{
+#    "query": "{ allAuthors { name } }"
+#  }'

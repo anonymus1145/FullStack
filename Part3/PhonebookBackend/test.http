@@ -1,0 +1,21 @@
+###
+#POST http://localhost:3001/people
+#Content-Type: application/json
+
+#{
+#  "name": "Test1 test1",
+#  "number": "2040-1234567"
+#}
+###
+
+#GET http://localhost:3001/people/65ca6ac97bb62e0482970b26
+
+#DELETE http://localhost:3001/people/65ca6dd5af244abadefbf68e
+
+PUT http://localhost:3001/people/65caaf0d3267c534ab9f95b8
+Content-Type: application/json
+
+{
+  "name": "Arto Hellas",
+  "number": "2140-1234567"
+}
