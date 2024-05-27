@@ -12,7 +12,6 @@ import authStorage from "../utils/authStorage";
 import { useNavigation } from "@react-navigation/native";
 import useTokenStore from "../zustandStore/tokenStore";
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -65,8 +64,8 @@ const SignIn = () => {
         setError("");
       }, 3000);
     }
-   
-      await signIn({ username, password });
+
+    await signIn({ username, password });
 
     if (response?.loading) {
       return <Text>Loading...</Text>;
