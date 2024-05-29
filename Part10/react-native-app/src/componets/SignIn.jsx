@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   },
 });
 
+
 const SignIn = () => {
   const [error, setError] = useState("");
   const [username, setUsername] = useState("");
@@ -64,7 +65,7 @@ const SignIn = () => {
         setError("");
       }, 3000);
     }
-
+    
     await signIn({ username, password });
 
     if (response?.loading) {
@@ -99,7 +100,7 @@ const SignIn = () => {
     navigation.navigate("RepositoryList");
   };
 
-  return (
+ return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign In</Text>
       <SafeAreaView>
@@ -116,9 +117,9 @@ const SignIn = () => {
           onChangeText={setPassword}
           secureTextEntry
         />
-        <Text style={{ color: "red", padding: 10 }}>{error}</Text>
       </SafeAreaView>
-      <Pressable style={styles.button} onPress={onSumbit}>
+      <Text style={{ color: "red" }}>{error}</Text>
+      <Pressable style={({ pressed }) => [styles.button, { opacity: pressed ? 0.5 : 1 }]} onPress={onSumbit}>
         <Text style={styles.text}>Sign In</Text>
       </Pressable>
     </View>

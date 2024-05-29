@@ -1,5 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import RepositoryList from "./RepositoryList";
+import RepositoryItem from "./RepositoryItem";
 import AppBar from "./AppBar";
 import SignIn from "./SignIn";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -26,6 +27,11 @@ const Main = () => {
         <Stack.Screen
           name="RepositoryList"
           component={RepositoryList}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RepositoryItem"
+          component={RepositoryItem}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

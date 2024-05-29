@@ -38,7 +38,7 @@ const AppBar = () => {
 
   return (
     <View style={styles.container}>
-      <Pressable
+      <Pressable onPress={() => navigation.navigate("RepositoryList")}
         style={({ pressed }) => [styles.button, { opacity: pressed ? 0.5 : 1 }]}
       >
         <Text style={styles.text}>Repositories</Text>

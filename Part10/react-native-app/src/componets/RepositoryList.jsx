@@ -1,7 +1,8 @@
-import { FlatList, View, StyleSheet, Text } from "react-native";
+import { FlatList, View, StyleSheet, Text, Pressable } from "react-native";
 import RepositoryItem from "./RepositoryItem";
 //import { useState, useEffect } from "react";
 import useRepositories from "../hooks/useRepositories";
+import { useNavigation } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
   separator: {
@@ -11,16 +12,11 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgray",
   },
 });
-
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
-
- const { repositoriesNodes, loading, error } = useRepositories();
-
-  if (!repositoriesNodes) {
-    console.log("Repositories in the list: ", repositoriesNodes);
-  }
+  const { repositoriesNodes, loading, error } = useRepositories();
+  const navigation = useNavigation();
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -30,16 +26,20 @@ const RepositoryList = () => {
     return <Text>Error: {error}</Text>;
   }
 
-  if (repositoriesNodes.length === 0) {
-    return <Text>No repositories found!</Text>;
-  }  
 
   return (
     <FlatList
       style={styles.container}
       data={repositoriesNodes}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RepositoryItem item={item} />}
+      renderItem={({ item }) => (
+        <Pressable
+          onPress={() => navigation.navigate("RepositoryItem", { id: item.id} )}
+          style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
+        >
+          <RepositoryItem item={item} />
+        </Pressable>
+      )}
       keyExtractor={(item) => item.id}
     />
   );
